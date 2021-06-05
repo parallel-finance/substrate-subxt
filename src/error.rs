@@ -140,6 +140,7 @@ impl RuntimeError {
             DispatchError::ConsumerRemaining => Ok(Self::ConsumerRemaining),
             DispatchError::NoProviders => Ok(Self::NoProviders),
             DispatchError::Other(msg) => Ok(Self::Other(msg.into())),
+            _ => Ok(Self::Other(msg.into())),//fixme : 20210605
         }
     }
 }
