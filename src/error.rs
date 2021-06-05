@@ -140,7 +140,7 @@ impl RuntimeError {
             DispatchError::ConsumerRemaining => Ok(Self::ConsumerRemaining),
             DispatchError::NoProviders => Ok(Self::NoProviders),
             DispatchError::Other(msg) => Ok(Self::Other(msg.into())),
-            _ => Ok(Self::Other(msg.into())),//fixme : 20210605
+            _ => Ok(Self::Other("fixme: sp-runtime polkadot-v0.9.2 error".to_string())),//fixme : 20210605
         }
     }
 }
