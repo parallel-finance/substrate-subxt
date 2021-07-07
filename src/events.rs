@@ -140,12 +140,27 @@ impl<T: Runtime + System> EventsDecoder<T> {
         let mut r = Vec::new();
         for _ in 0..len {
             // decode EventRecord
-            let phase = Phase::decode(input)?;
-            let module_variant = input.read_byte()?;
+            let phase = match Phase::decode(input){
+                Ok(m) => m,
+                Err(_) => continue,
+            };
+            let module_variant = match input.read_byte(){
+                Ok(m) => m,
+                Err(_) => continue,
+            };
 
-            let module = self.metadata.module_with_events(module_variant)?;
-            let event_variant = input.read_byte()?;
-            let event_metadata = module.event(event_variant)?;
+            let module = match self.metadata.module_with_events(module_variant){
+                Ok(m) => m,
+                Err(_) => continue,
+            };
+            let event_variant = match input.read_byte(){
+                Ok(m) => m,
+                Err(_) => continue,
+            };
+            let event_metadata = match module.event(event_variant){
+                Ok(m) => m,
+                Err(_) => continue,
+            };
 
             log::debug!(
                 "received event '{}::{}' ({:?})",
@@ -176,7 +191,7 @@ impl<T: Runtime + System> EventsDecoder<T> {
                     let _topics = Vec::<T::Hash>::decode(input)?;
                     Raw::Event(event)
                 }
-                Err(err) => return Err(err),
+                Err(err) => {log::debug!("event error {:?}", err); continue},
             };
 
             if event_errors.is_empty() {
