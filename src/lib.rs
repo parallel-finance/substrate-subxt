@@ -149,7 +149,7 @@ impl<T: Runtime> ClientBuilder<T> {
             url: None,
             client: None,
             page_size: None,
-            event_type_registry: EventTypeRegistry::new(),
+            event_type_registry: EventTypeRegistry::<T>::new(),
             skip_type_sizes_check: false,
             accept_weak_inclusion: false,
         }

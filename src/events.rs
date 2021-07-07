@@ -135,34 +135,37 @@ impl<T: Runtime + System> EventsDecoder<T> {
     /// Decode events.
     pub fn decode_events(&self, input: &mut &[u8]) -> Result<Vec<(Phase, Raw)>, Error> {
         let compact_len = <Compact<u32>>::decode(input)?;
+        // let _events = Vec::<system::EventRecord<Event, Hash>>::decode(&mut input);
+        // log::info!("############ events:", _events);
         let len = compact_len.0 as usize;
+        log::info!("########### len(events):{}", len);
 
         let mut r = Vec::new();
         for _ in 0..len {
             // decode EventRecord
             let phase = match Phase::decode(input){
                 Ok(m) => m,
-                Err(_) => continue,
+                Err(e) => { log::info!("######## err1:{:?}", e); continue },
             };
             let module_variant = match input.read_byte(){
                 Ok(m) => m,
-                Err(_) => continue,
+                Err(e) => { log::info!("######## err2:{:?}", e); continue },
             };
 
             let module = match self.metadata.module_with_events(module_variant){
                 Ok(m) => m,
-                Err(_) => continue,
+                Err(e) => { log::info!("######## err3:{:?}", e); continue },
             };
             let event_variant = match input.read_byte(){
                 Ok(m) => m,
-                Err(_) => continue,
+                Err(e) => { log::info!("######## err4:{:?}", e); continue },
             };
             let event_metadata = match module.event(event_variant){
                 Ok(m) => m,
-                Err(_) => continue,
+                Err(e) => { log::info!("######## err5:{:?}", e); continue },
             };
 
-            log::debug!(
+            log::info!(
                 "received event '{}::{}' ({:?})",
                 module.name(),
                 event_metadata.name,
@@ -188,10 +191,13 @@ impl<T: Runtime + System> EventsDecoder<T> {
                     };
 
                     // topics come after the event data in EventRecord
-                    let _topics = Vec::<T::Hash>::decode(input)?;
+                    let _topics = match Vec::<T::Hash>::decode(input){
+                        Ok(t) => t,
+                        Err(e) => { log::info!("######## err5:{:?}", e); continue },
+                    };
                     Raw::Event(event)
                 }
-                Err(err) => {log::debug!("event error {:?}", err); continue},
+                Err(err) => {log::info!("event error {:?}", err); continue},
             };
 
             if event_errors.is_empty() {
