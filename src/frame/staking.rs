@@ -16,12 +16,14 @@
 
 //! Implements support for the pallet_staking module.
 
+
 use super::balances::Balances;
 use codec::{
     Decode,
     Encode,
 };
-
+use frame_support::Parameter;
+use sp_runtime::traits::Member;
 use std::{
     collections::BTreeMap,
     fmt::Debug,
@@ -65,6 +67,9 @@ pub struct SetPayeeCall<T: Staking> {
 pub trait Staking: Balances {
     #![event_alias(ElectionCompute = u8)]
     #![event_type(EraIndex)]
+
+    /// Candidate Receipt
+    type CandidateReceipt: Parameter + Member;
 }
 
 /// Number of eras to keep in history.

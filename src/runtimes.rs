@@ -28,6 +28,10 @@ use sp_runtime::{
 };
 use sp_std::prelude::*;
 
+use polkadot_primitives::{
+    v1::CandidateReceipt,
+};
+
 /// BABE marker struct
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct Babe;
@@ -193,7 +197,9 @@ pub trait Runtime: System + Sized + Send + Sync + 'static {
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct DefaultNodeRuntime;
 
-impl Staking for DefaultNodeRuntime {}
+impl Staking for DefaultNodeRuntime {
+    type CandidateReceipt = ();
+}
 
 impl Runtime for DefaultNodeRuntime {
     type Signature = MultiSignature;
@@ -360,7 +366,9 @@ impl Session for KusamaRuntime {
     type Keys = SessionKeys;
 }
 
-impl Staking for KusamaRuntime {}
+impl Staking for KusamaRuntime {
+    type CandidateReceipt = CandidateReceipt;
+}
 
 impl Balances for KusamaRuntime {
     type Balance = u128;
