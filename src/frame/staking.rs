@@ -70,6 +70,9 @@ pub trait Staking: Balances {
 
     /// Candidate Receipt
     type CandidateReceipt: Parameter + Member;
+
+    /// HeadData
+    type HeadData: Parameter + Member;
 }
 
 /// Number of eras to keep in history.

@@ -29,7 +29,7 @@ use sp_runtime::{
 use sp_std::prelude::*;
 
 use polkadot_primitives::{
-    v1::CandidateReceipt,
+    v1::{CandidateReceipt, HeadData},
 };
 
 /// BABE marker struct
@@ -198,7 +198,8 @@ pub trait Runtime: System + Sized + Send + Sync + 'static {
 pub struct DefaultNodeRuntime;
 
 impl Staking for DefaultNodeRuntime {
-    type CandidateReceipt = ();
+    type CandidateReceipt = CandidateReceipt;
+    type HeadData = HeadData;
 }
 
 impl Runtime for DefaultNodeRuntime {
@@ -368,6 +369,7 @@ impl Session for KusamaRuntime {
 
 impl Staking for KusamaRuntime {
     type CandidateReceipt = CandidateReceipt;
+    type HeadData = HeadData;
 }
 
 impl Balances for KusamaRuntime {
