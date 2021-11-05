@@ -233,13 +233,13 @@ impl<T: Runtime> ClientBuilder<T> {
         {
             if self.skip_type_sizes_check {
                 log::warn!(
-                    "The following types do not have registered type segmenters: {:?} \
+                    "The following types do not have registered type segmenters: [{:?}...] \
                     If any events containing these types are received, this can cause a \
                     `TypeSizeUnavailable` error and prevent decoding the actual event \
                     being listened for.\
                     \
                     Use `ClientBuilder::register_type_size` to register missing type sizes.",
-                    missing
+                    missing[0..2]
                 );
             } else {
                 return Err(Error::MissingTypeSizes(missing.into_iter().collect()))
