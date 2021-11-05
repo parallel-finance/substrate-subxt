@@ -619,9 +619,9 @@ impl<T: Runtime> Rpc<T> {
             let mut sub = EventSubscription::new(events_sub, decoder);
             sub.filter_extrinsic(block_hash, ext_index);
             let mut events = vec![];
-            while let Some(event) = sub.next().await {
-                events.push(event?);
-            }
+            // while let Some(event) = sub.next().await {
+            //     events.push(event?);
+            // }
             Ok(ExtrinsicSuccess {
                 block: block_hash,
                 extrinsic: ext_hash,
